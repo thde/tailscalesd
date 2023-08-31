@@ -188,7 +188,7 @@ func (h *discoveryHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			serveAndLog(w, fmt.Sprintf("Failed to discover Tailscale devices: %v", err))
 			return
 		}
-		// TODO(cfunkhouser): Investigate whether Prometheus respects cache
+		// TODO(thde): Investigate whether Prometheus respects cache
 		// control headers, and implement accordingly here.
 		log.Print("Serving potentially stale results")
 	}

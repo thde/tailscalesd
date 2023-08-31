@@ -1,11 +1,2 @@
-*.dll
-*.dylib
-*.exe
-*.exe~
-*.json
-*.out
-*.so
-*.test
-*.yaml
-*.yml
 tailscalesd
+dist/

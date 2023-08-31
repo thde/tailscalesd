@@ -8,10 +8,10 @@ For details on HTTP Service Discovery, read the Prometheus docs:
 ## Installation
 
 Release builds for various architectures can be obtained from
-[GitHub](https://github.com/cfunkhouser/tailscalesd/releases/latest).
+[GitHub](https://github.com/thde/tailscalesd/releases/latest).
 
 There is also a
-Docker image provided under `ghcr.io/cfunkhouser/tailscalesd`. The `latest` tag
+Docker image provided under `ghcr.io/thde/tailscalesd`. The `latest` tag
 is automatically updated with each release. The Docker image is available for
 `arm/v7`, `arm64` and `amd64`.
 
