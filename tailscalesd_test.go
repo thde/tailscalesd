@@ -3,19 +3,18 @@ package tailscalesd
 import (
 	"context"
 	"errors"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"reflect"
 	"testing"
-
-	"github.com/google/go-cmp/cmp"
 )
 
 func TestMain(m *testing.M) {
 	// No log output during test runs.
-	log.SetOutput(ioutil.Discard)
+	log.SetOutput(io.Discard)
 	os.Exit(m.Run())
 }
 
@@ -56,8 +55,8 @@ func TestExcludeEmptyMapEntries(t *testing.T) {
 	} {
 		t.Run(tn, func(t *testing.T) {
 			got := excludeEmptyMapEntries(tc.in)
-			if diff := cmp.Diff(got, tc.want); diff != "" {
-				t.Errorf("excludeEmptyMapEntries: mismatch (-got, +want):\n%v", diff)
+			if !reflect.DeepEqual(got, tc.want) {
+				t.Errorf("excludeEmptyMapEntries() = %v, want %v", got, tc.want)
 			}
 		})
 	}
@@ -104,8 +103,8 @@ func TestFilterIPv6Addresses(t *testing.T) {
 	} {
 		t.Run(tn, func(t *testing.T) {
 			got := FilterIPv6Addresses(tc.descriptor)
-			if diff := cmp.Diff(got, tc.want); diff != "" {
-				t.Errorf("FilterIPv6Addresses: mismatch (-got, +want):\n%v", diff)
+			if !reflect.DeepEqual(got, tc.want) {
+				t.Errorf("FilterIPv6Addresses() = %v, want %v", got, tc.want)
 			}
 		})
 	}
@@ -263,8 +262,8 @@ func TestTranslate(t *testing.T) {
 	} {
 		t.Run(tn, func(t *testing.T) {
 			got := translate(tc.devices, tc.filters...)
-			if diff := cmp.Diff(got, tc.want); diff != "" {
-				t.Errorf("translate: mismatch (-got, +want):\n%v", diff)
+			if !reflect.DeepEqual(got, tc.want) {
+				t.Errorf("translate() = %v, want %v", got, tc.want)
 			}
 		})
 	}
@@ -374,8 +373,9 @@ func TestDiscoveryHandler(t *testing.T) {
 			if w.Code != tc.want.code {
 				t.Errorf("discoveryHandler: status code mismatch: got: %v want: %v", w.Code, tc.want.code)
 			}
-			if diff := cmp.Diff(w.Body.String(), tc.want.body); diff != "" {
-				t.Errorf("discoveryHandler: content mismatch (-got, +want):\n%v", diff)
+			got := w.Body.String()
+			if !reflect.DeepEqual(got, tc.want.body) {
+				t.Errorf("discoveryHandler() = %v, want %v", got, tc.want)
 			}
 		})
 	}

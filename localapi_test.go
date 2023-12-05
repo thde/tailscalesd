@@ -1,10 +1,9 @@
 package tailscalesd
 
 import (
+	"net"
+	"reflect"
 	"testing"
-
-	"github.com/google/go-cmp/cmp"
-	"inet.af/netaddr"
 )
 
 func TestTranslatePeerToDevice(t *testing.T) {
@@ -29,16 +28,16 @@ func TestTranslatePeerToDevice(t *testing.T) {
 		HostName: "somethingclever",
 		DNSName:  "this is currently ignored",
 		OS:       "beos",
-		TailscaleIPs: []netaddr.IP{
-			netaddr.MustParseIP("100.2.3.4"),
-			netaddr.MustParseIP("fd7a::1234"),
+		TailscaleIPs: []net.IP{
+			net.ParseIP("100.2.3.4"),
+			net.ParseIP("fd7a::1234"),
 		},
 		Tags: []string{
 			"tag:foo",
 			"tag:bar",
 		},
 	}, &got)
-	if diff := cmp.Diff(got, want); diff != "" {
-		t.Errorf("translatePeerToDevice: mismatch (-got, +want):\n%v", diff)
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("translatePeerToDevice() = %v, want %v", got, want)
 	}
 }

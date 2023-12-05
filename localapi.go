@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
-	"inet.af/netaddr"
 )
 
 // LocalAPISocket is the path to the Unix domain socket on which tailscaled
@@ -23,7 +22,7 @@ const LocalAPISocket = "/run/tailscale/tailscaled.sock"
 // borrowed from version 1.22.2. For field details, see:
 // https://pkg.go.dev/tailscale.com@v1.22.2/ipn/ipnstate?utm_source=gopls#Status
 type interestingStatusSubset struct {
-	TailscaleIPs []netaddr.IP // Tailscale IP(s) assigned to this node
+	TailscaleIPs []net.IP // Tailscale IP(s) assigned to this node
 	Self         *interestingPeerStatusSubset
 	Peer         map[string]*interestingPeerStatusSubset
 }
@@ -35,7 +34,7 @@ type interestingPeerStatusSubset struct {
 	HostName     string
 	DNSName      string
 	OS           string
-	TailscaleIPs []netaddr.IP
+	TailscaleIPs []net.IP
 	Tags         []string `json:",omitempty"`
 }
 

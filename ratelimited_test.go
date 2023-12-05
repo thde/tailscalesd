@@ -3,10 +3,9 @@ package tailscalesd
 import (
 	"context"
 	"errors"
+	"reflect"
 	"testing"
 	"time"
-
-	"github.com/google/go-cmp/cmp"
 )
 
 var devicesForRatelimitedTest = []Device{
@@ -110,8 +109,8 @@ func TestRateLimitedDiscoverer(t *testing.T) {
 			if got, want := tc.wrapped.Called, tc.want.called; got != want {
 				t.Errorf("RateLimitedDiscoverer: mismatched Discover call count: got: %d want: %d", got, want)
 			}
-			if diff := cmp.Diff(got, tc.want.devices); diff != "" {
-				t.Errorf("RateLimitedDiscoverer: mismatch (-got, +want):\n%v", diff)
+			if !reflect.DeepEqual(got, tc.want.devices) {
+				t.Errorf("RateLimitedDiscoverer() = %v, want %v", got, tc.want.devices)
 			}
 		})
 	}

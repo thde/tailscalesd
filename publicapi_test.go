@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -23,7 +24,7 @@ func apiBaseForTest(tb testing.TB, surl string) string {
 }
 
 func TestPublicAPIDiscovererDevices(t *testing.T) {
-	var wantPath = "/api/v2/tailnet/testTailnet/devices"
+	wantPath := "/api/v2/tailnet/testTailnet/devices"
 	for tn, tc := range map[string]struct {
 		responder func(w http.ResponseWriter)
 		wantErr   error
@@ -70,6 +71,7 @@ func TestPublicAPIDiscovererDevices(t *testing.T) {
 			if got, want := err, tc.wantErr; !errors.Is(got, want) {
 				t.Errorf("Devices: error mismatch: got: %q want: %q", got, want)
 			}
+
 			// Ignore the API field, which will be set to the arbitrary test
 			// server's host:port.
 			if diff := cmp.Diff(got, tc.want, cmpopts.IgnoreFields(Device{}, "API")); diff != "" {
@@ -125,8 +127,8 @@ func TestPublicAPISetsDefaults(t *testing.T) {
 		tailnet: "testTailnet",
 		token:   "testToken",
 	}
-	if diff := cmp.Diff(got, want, cmp.Comparer(publicAPIDiscovererComparer)); diff != "" {
-		t.Errorf("PublicAPI: mismatch (-got, +want):\n%v", diff)
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("PublicAPI() = %v, want %v", got, want)
 	}
 }
 
