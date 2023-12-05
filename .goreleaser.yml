@@ -1,7 +1,7 @@
 env:
   - KO_DOCKER_REPO=ghcr.io/{{ .Env.GITHUB_REPOSITORY }}
 builds:
-  - main: ./cmd/{{ .ProjectName }}/
+  - main: ./cmd/tailscalesd/
     env:
       - CGO_ENABLED=0
     goos:
