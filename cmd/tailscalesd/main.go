@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"runtime/debug"
 	"strings"
 	"time"
 
@@ -24,8 +25,11 @@ var (
 	token          string
 	useLocalAPI    bool
 
-	// Version of tailscalesd. Set at build time to something meaningful.
-	Version = "development"
+	// version of tailscalesd. Set at build time to something meaningful.
+	version   string
+	commit    string
+	date      string
+	goVersion string
 )
 
 func envVarWithDefault(key, def string) string {
@@ -85,7 +89,7 @@ func main() {
 	flag.Parse()
 
 	if printVer {
-		fmt.Printf("tailscalesd version %v\n", Version)
+		fmt.Printf("tailscalesd (%s, %s)\n", version, commit)
 		return
 	}
 
@@ -133,4 +137,29 @@ func main() {
 	log.Printf("Serving Tailscale service discovery on %q", address)
 	log.Print(http.ListenAndServe(address, nil))
 	log.Print("Done")
+}
+
+func init() {
+	info, ok := debug.ReadBuildInfo()
+	if !ok {
+		return
+	}
+
+	if version == "" {
+		version = info.Main.Version
+	}
+
+	goVersion = info.GoVersion
+
+	for _, kv := range info.Settings {
+		switch kv.Key {
+		case "vcs.revision":
+			if len(kv.Value) < 7 {
+				continue
+			}
+			commit = kv.Value[:7]
+		case "vcs.time":
+			date = kv.Value
+		}
+	}
 }
