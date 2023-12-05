@@ -12,8 +12,7 @@ Release builds for various architectures can be obtained from
 
 There is also a
 Docker image provided under `ghcr.io/thde/tailscalesd`. The `latest` tag
-is automatically updated with each release. The Docker image is available for
-`arm/v7`, `arm64` and `amd64`.
+is automatically updated with each release. The Docker image is available for `arm64` and `amd64`.
 
 ## Usage
 
