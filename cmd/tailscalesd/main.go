@@ -18,7 +18,7 @@ import (
 var (
 	address        string = "0.0.0.0:9242"
 	includeIPv6    bool
-	localAPISocket string        = tailscalesd.PublicAPIHost
+	localAPISocket string        = tailscalesd.LocalAPISocket
 	pollLimit      time.Duration = time.Minute * 5
 	printVer       bool
 	tailnet        string
